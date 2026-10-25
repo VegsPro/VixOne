@@ -69,14 +69,18 @@ class SyncViewModel(app: Application) : AndroidViewModel(app) {
     fun checkConnection() {
         viewModelScope.launch {
             _state.update { it.copy(isBusy = true, syncStatus = "Проверка сервера...") }
-            val result = ApiClient.getBaseUrl()
-            result.onSuccess { url ->
+            try {
+                val url = ApiClient.getBaseUrl()
                 appendLog("Сервер: $url")
                 // Register device in DB
-                val reg = ApiClient.dbWrite("vix_devices", deviceId, JSONObject().apply {
-                    put("last_seen", System.currentTimeMillis())
-                    put("name", android.os.Build.MODEL)
-                }.toString())
+                val reg = ApiClient.dbWriteJson(
+                    "vix_devices",
+                    deviceId,
+                    JSONObject().apply {
+                        put("last_seen", System.currentTimeMillis())
+                        put("name", android.os.Build.MODEL)
+                    }.toString()
+                )
                 reg.onSuccess {
                     prefs.edit().putBoolean("registered", true).apply()
                     _state.update {
@@ -92,7 +96,7 @@ class SyncViewModel(app: Application) : AndroidViewModel(app) {
                     _state.update { it.copy(isBusy = false, syncStatus = "Ошибка регистрации") }
                     appendLog("Ошибка: ${e.message}")
                 }
-            }.onFailure { e ->
+            } catch (e: Exception) {
                 _state.update { it.copy(isBusy = false, syncStatus = "Нет связи", isConnected = false) }
                 appendLog("Ошибка base URL: ${e.message}")
             }
@@ -166,7 +170,7 @@ class SyncViewModel(app: Application) : AndroidViewModel(app) {
                 // Save sync meta
                 val now = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(Date())
                 prefs.edit().putString("last_sync", now).apply()
-                ApiClient.dbWrite("vix_sync", deviceId, JSONObject().apply {
+                ApiClient.dbWriteJson("vix_sync", deviceId, JSONObject().apply {
                     put("last_sync", System.currentTimeMillis())
                     put("uploaded", uploaded)
                     put("local_count", localFiles.size)
