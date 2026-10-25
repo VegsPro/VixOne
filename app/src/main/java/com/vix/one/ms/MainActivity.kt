@@ -153,7 +153,7 @@ fun AuthScreen(
                 modifier = Modifier.fillMaxWidth().height(52.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2AABEE))
             ) {
-                if (isLoading) CircularProgressIndicator(Modifier = Modifier.size(22.dp), color = Color.White, strokeWidth = 2.dp)
+                if (isLoading) CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Color.White)
                 else Text("Войти / Создать", fontWeight = FontWeight.Bold)
             }
         }
@@ -456,7 +456,7 @@ fun CreateGroupScreen(
                 modifier = Modifier.fillMaxWidth().height(52.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2AABEE))
             ) {
-                if (isLoading) CircularProgressIndicator(Modifier.size(22.dp), color = Color.White, strokeWidth = 2.dp)
+                if (isLoading) CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Color.White)
                 else Text("Создать группу")
             }
         }
@@ -512,7 +512,7 @@ fun AddMemberScreen(
                 modifier = Modifier.fillMaxWidth().height(52.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2AABEE))
             ) {
-                if (isLoading) CircularProgressIndicator(Modifier.size(22.dp), color = Color.White, strokeWidth = 2.dp)
+                if (isLoading) CircularProgressIndicator(modifier = Modifier.size(22.dp), color = Color.White)
                 else Text("Добавить")
             }
         }
