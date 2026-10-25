@@ -1,0 +1,3 @@
+-keep class com.vix.one.ms.** { *; }
+-dontwarn okhttp3.**
+-dontwarn okio.**
